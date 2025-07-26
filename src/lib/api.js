@@ -46,6 +46,7 @@ export const authAPI = {
   register: (userData) => api.post('/auth/register', userData),
   getProfile: () => api.get('/auth/profile'),
   registerDriver: (driverData) => api.post('/auth/register-driver', driverData),
+  logout: () => api.post('/auth/logout'),
 };
 
 export const bookingAPI = {
