@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import { cn } from '@/lib/utils';
 
-export default function Sidebar({ items }) {
+export default function Sidebar({ items, onToggle }) {
   const [collapsed, setCollapsed] = useState(false);
   const pathname = usePathname();
 
@@ -17,14 +17,18 @@ export default function Sidebar({ items }) {
   return (
     <div
       className={cn(
-        'h-[calc(100vh-5rem)] bg-white border-r border-gray-200 transition-all duration-300 flex flex-col',
+        'fixed top-20 left-0 h-[calc(100vh-5rem)] bg-white border-r border-gray-200 transition-all duration-300 flex flex-col z-10',
         collapsed ? 'w-16' : 'w-64'
       )}
     >
       {/* Toggle Button */}
       <div className="p-4 border-b border-gray-200">
         <button
-          onClick={() => setCollapsed(!collapsed)}
+          onClick={() => {
+            const newCollapsed = !collapsed;
+            setCollapsed(newCollapsed);
+            onToggle?.(newCollapsed);
+          }}
           className="w-full flex items-center justify-center p-2 rounded-lg hover:bg-gray-100 transition-colors"
         >
           {collapsed ? (

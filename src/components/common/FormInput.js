@@ -114,7 +114,7 @@ export function Select({
       )}
       <select
         className={cn(
-          'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+          'w-full px-3 py-2 text-gray-700 placeholder:text-gray-300 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
           error && 'border-red-300 focus:ring-red-500',
           className
         )}
@@ -161,7 +161,7 @@ export function Textarea({
       <textarea
         rows={rows}
         className={cn(
-          'w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none',
+          'w-full px-3 py-2 text-gray-700 placeholder:text-gray-300 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none',
           error && 'border-red-300 focus:ring-red-500',
           className
         )}

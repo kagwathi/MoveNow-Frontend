@@ -18,6 +18,18 @@ export const formatDate = (date, pattern = 'PPP') => {
   return format(new Date(date), pattern);
 };
 
+export const formatTime = (time) => {
+  if (!time) return '';
+
+  // If time is in HH:MM format, convert to 12-hour format
+  const [hours, minutes] = time.split(':');
+  const hour = parseInt(hours);
+  const ampm = hour >= 12 ? 'PM' : 'AM';
+  const displayHour = hour % 12 || 12;
+
+  return `${displayHour}:${minutes} ${ampm}`;
+};
+
 export const formatTimeAgo = (date) => {
   return formatDistance(new Date(date), new Date(), { addSuffix: true });
 };
@@ -59,4 +71,19 @@ export const validateEmail = (email) => {
 export const validatePhone = (phone) => {
   const re = /^[\+]?[0-9]{10,15}$/;
   return re.test(phone.replace(/\s/g, ''));
+};
+
+export const formatDuration = (minutes) => {
+  if (minutes < 60) {
+    return `${Math.round(minutes)} min`;
+  }
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = Math.round(minutes % 60);
+  return remainingMinutes > 0 ? `${hours}h ${remainingMinutes}m` : `${hours}h`;
+};
+
+export const generateBookingId = () => {
+  const timestamp = Date.now().toString(36);
+  const randomStr = Math.random().toString(36).substring(2, 8);
+  return `MN${timestamp}${randomStr}`.toUpperCase();
 };

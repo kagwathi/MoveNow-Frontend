@@ -2,13 +2,14 @@
 
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Header from '@/components/common/Header';
 import Sidebar from '@/components/common/Sidebar';
 
 export default function CustomerLayout({ children }) {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   useEffect(() => {
     if (!loading) {
@@ -40,11 +41,11 @@ export default function CustomerLayout({ children }) {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 pt-20">
       <Header user={user} />
       <div className="flex">
-        <Sidebar items={sidebarItems} />
-        <main className="flex-1 p-6">{children}</main>
+        <Sidebar items={sidebarItems} onToggle={setSidebarCollapsed} />
+        <main className={`flex-1 p-6 transition-all duration-300 ${sidebarCollapsed ? 'ml-16' : 'ml-64'}`}>{children}</main>
       </div>
     </div>
   );
