@@ -45,6 +45,8 @@ export const authAPI = {
   login: (credentials) => api.post('/auth/login', credentials),
   register: (userData) => api.post('/auth/register', userData),
   getProfile: () => api.get('/auth/profile'),
+  updateProfile: (data) => api.put('/auth/profile', data),
+  changePassword: (data) => api.post('/auth/change-password', data),
   registerDriver: (driverData) => api.post('/auth/register-driver', driverData),
   logout: () => api.post('/auth/logout'),
 };
@@ -75,6 +77,11 @@ export const driverAPI = {
 export const adminAPI = {
   getDashboard: (params) => api.get('/admin/dashboard', { params }),
   getUsers: (params) => api.get('/admin/users', { params }),
+  updateUserStatus: (id, data) => api.put(`/admin/users/${id}/status`, data),
+  deleteUser: (id, reason = null) => {
+    const data = reason ? { reason } : {};
+    return api.delete(`/admin/users/${id}`, { data });
+  },
   approveDriver: (id, data) => api.put(`/admin/drivers/${id}/approve`, data),
   getBookings: (params) => api.get('/admin/bookings', { params }),
   updateBookingStatus: (id, data) =>
