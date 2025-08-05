@@ -38,21 +38,36 @@ export default function DriverDashboard() {
       setLoading(true);
       setError(null);
 
-      // First, fetch driver profile to check approval status
+      // First, fetch driver profile to check status
       const profileRes = await authAPI.getProfile();
       const profile = profileRes.data.data.user;
       setDriverProfile(profile);
+
+      // Check if driver profile exists at all
+      if (!profile.driverProfile) {
+        setError({
+          type: 'no_profile',
+          message: 'You need to create your driver profile to start earning.',
+          action: 'Create Driver Profile',
+        });
+        setLoading(false);
+        return;
+      }
 
       // Set availability status from the fetched driver profile
       setAvailabilityStatus(
         profile.driverProfile?.availability_status || 'offline'
       );
 
-      // Check if driver is approved
+      // Check if driver profile is pending approval
       if (!profile.driverProfile?.is_approved) {
-        setError(
-          'Your driver account is pending approval. Please wait for admin approval.'
-        );
+        setError({
+          type: 'pending_approval',
+          message:
+            'Your driver profile is under review. Please wait for admin approval.',
+          submittedDate: profile.driverProfile?.createdAt,
+          documentsVerified: profile.driverProfile?.documents_verified,
+        });
         setLoading(false);
         return;
       }
@@ -61,7 +76,10 @@ export default function DriverDashboard() {
       await fetchDashboardData(profile);
     } catch (error) {
       console.error('Failed to fetch driver profile:', error);
-      setError('Failed to load profile information. Please try again.');
+      setError({
+        type: 'fetch_error',
+        message: 'Failed to load profile information. Please try again.',
+      });
       setLoading(false);
     }
   };
@@ -178,48 +196,165 @@ export default function DriverDashboard() {
   if (error) {
     return (
       <div className="space-y-6">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-          <div className="flex items-start">
-            <div className="p-2 bg-red-100 rounded-lg">
-              <ExclamationTriangleIcon className="h-6 w-6 text-red-600" />
-            </div>
-            <div className="ml-4">
-              <h3 className="text-lg font-semibold text-red-900">
-                Account Status Issue
-              </h3>
-              <p className="text-red-700 mt-1">{error}</p>
-              {driverProfile && !driverProfile.driverProfile?.is_approved && (
-                <div className="mt-4">
-                  <p className="text-sm text-red-600">
-                    Your driver application is being reviewed. You&apos;ll
-                    receive an email once approved.
-                  </p>
-                  <div className="mt-3 p-3 bg-red-50 rounded border">
-                    <p className="text-xs text-red-600">
-                      <strong>Application Status:</strong> Pending Review
-                      <br />
-                      <strong>Submitted:</strong>{' '}
-                      {new Date(
-                        driverProfile.driverProfile.createdAt
-                      ).toLocaleDateString()}
-                      <br />
-                      <strong>Documents:</strong>{' '}
-                      {driverProfile.driverProfile.documents_verified
-                        ? 'Verified'
-                        : 'Under Review'}
-                    </p>
-                  </div>
+        {/* No Driver Profile Created */}
+        {error.type === 'no_profile' && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+            <div className="flex items-start">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <TruckIcon className="h-6 w-6 text-blue-600" />
+              </div>
+              <div className="ml-4 flex-1">
+                <h3 className="text-lg font-semibold text-blue-900">
+                  Complete Your Driver Setup
+                </h3>
+                <p className="text-blue-700 mt-1">{error.message}</p>
+                <div className="mt-4 p-4 bg-blue-50 rounded border border-blue-200">
+                  <h4 className="font-medium text-blue-900 mb-2">
+                    What&apos;s Next:
+                  </h4>
+                  <ul className="text-sm text-blue-700 space-y-1">
+                    <li>• Create your driver profile with vehicle details</li>
+                    <li>
+                      • Upload required documents (license, insurance, etc.)
+                    </li>
+                    <li>• Wait for admin approval (usually 24-48 hours)</li>
+                    <li>• Start accepting jobs and earning money!</li>
+                  </ul>
                 </div>
-              )}
-              <button
-                onClick={() => window.location.reload()}
-                className="mt-4 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
-              >
-                Refresh Page
-              </button>
+                <div className="mt-4 flex space-x-3">
+                  <button
+                    onClick={() =>
+                      (window.location.href = '/driver/profile/setup')
+                    }
+                    className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                  >
+                    {error.action}
+                  </button>
+                  <button
+                    onClick={() =>
+                      (window.location.href = '/help/driver-setup')
+                    }
+                    className="bg-white text-blue-600 border border-blue-300 px-4 py-2 rounded-lg hover:bg-blue-50 transition-colors"
+                  >
+                    Need Help?
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        )}
+
+        {/* Pending Approval */}
+        {error.type === 'pending_approval' && (
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+            <div className="flex items-start">
+              <div className="p-2 bg-yellow-100 rounded-lg">
+                <ClockIcon className="h-6 w-6 text-yellow-600" />
+              </div>
+              <div className="ml-4 flex-1">
+                <h3 className="text-lg font-semibold text-yellow-900">
+                  Profile Under Review
+                </h3>
+                <p className="text-yellow-700 mt-1">{error.message}</p>
+
+                <div className="mt-4 p-4 bg-yellow-50 rounded border border-yellow-200">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <p className="font-medium text-yellow-900">
+                        Application Status:
+                      </p>
+                      <p className="text-yellow-700">Pending Admin Review</p>
+                    </div>
+                    <div>
+                      <p className="font-medium text-yellow-900">
+                        Submitted Date:
+                      </p>
+                      <p className="text-yellow-700">
+                        {error.submittedDate
+                          ? new Date(error.submittedDate).toLocaleDateString()
+                          : 'Recently'}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="font-medium text-yellow-900">
+                        Documents Status:
+                      </p>
+                      <span
+                        className={`px-2 py-1 text-xs font-medium rounded-full ${
+                          error.documentsVerified
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-yellow-100 text-yellow-800'
+                        }`}
+                      >
+                        {error.documentsVerified ? 'Verified' : 'Under Review'}
+                      </span>
+                    </div>
+                    <div>
+                      <p className="font-medium text-yellow-900">
+                        Expected Timeline:
+                      </p>
+                      <p className="text-yellow-700">24-48 hours</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-4 p-3 bg-yellow-100 rounded border border-yellow-300">
+                  <p className="text-sm text-yellow-800">
+                    <strong>What happens next?</strong>
+                    <br />
+                    Our admin team is reviewing your profile and documents.
+                    You&apos;ll receive an email notification once your account
+                    is approved and you can start accepting jobs.
+                  </p>
+                </div>
+
+                <div className="mt-4 flex space-x-3">
+                  <button
+                    onClick={() => (window.location.href = '/driver/profile')}
+                    className="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 transition-colors"
+                  >
+                    View My Profile
+                  </button>
+                  <button
+                    onClick={() => (window.location.href = '/contact-support')}
+                    className="bg-white text-yellow-600 border border-yellow-300 px-4 py-2 rounded-lg hover:bg-yellow-50 transition-colors"
+                  >
+                    Contact Support
+                  </button>
+                  <button
+                    onClick={() => window.location.reload()}
+                    className="bg-white text-yellow-600 border border-yellow-300 px-4 py-2 rounded-lg hover:bg-yellow-50 transition-colors"
+                  >
+                    Refresh Status
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* General Fetch Error */}
+        {error.type === 'fetch_error' && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+            <div className="flex items-start">
+              <div className="p-2 bg-red-100 rounded-lg">
+                <ExclamationTriangleIcon className="h-6 w-6 text-red-600" />
+              </div>
+              <div className="ml-4">
+                <h3 className="text-lg font-semibold text-red-900">
+                  Connection Error
+                </h3>
+                <p className="text-red-700 mt-1">{error.message}</p>
+                <button
+                  onClick={() => window.location.reload()}
+                  className="mt-4 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+                >
+                  Try Again
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
