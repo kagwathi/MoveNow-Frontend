@@ -56,7 +56,7 @@ export default function VehicleSetup({ onVehicleAdded }) {
         insurance_expiry: formData.insurance_expiry,
       });
 
-      toast('Vehicle added successfully!');
+      toast.success('Vehicle added successfully!');
       onVehicleAdded?.();
 
       // Reset form

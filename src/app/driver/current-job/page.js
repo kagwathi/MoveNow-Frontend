@@ -15,6 +15,7 @@ import {
   ArrowRightIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
+import { useToast } from '@/components/common/Toast';
 
 export default function CurrentJob() {
   const { user } = useAuth();
@@ -24,6 +25,8 @@ export default function CurrentJob() {
   const [error, setError] = useState(null);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [cancellationReason, setCancellationReason] = useState('');
+
+  const toast = useToast();
 
   // Status workflow definitions
   const statusWorkflow = {
@@ -127,10 +130,10 @@ export default function CurrentJob() {
 
       // Show success message
       const statusInfo = statusWorkflow[newStatus];
-      alert(`Status updated to: ${statusInfo?.label || newStatus}`);
+      toast.info(`Status updated to: ${statusInfo?.label || newStatus}`);
     } catch (error) {
       console.error('Failed to update job status:', error);
-      alert(error.response?.data?.message || 'Failed to update job status');
+      // alert(error.response?.data?.message || 'Failed to update job status');
     } finally {
       setUpdating(false);
     }
@@ -138,7 +141,7 @@ export default function CurrentJob() {
 
   const handleCancelJob = async () => {
     if (!cancellationReason.trim()) {
-      alert('Please provide a reason for cancellation');
+      toast.info('Please provide a reason for cancellation');
       return;
     }
 
@@ -156,10 +159,10 @@ export default function CurrentJob() {
       // Refresh to show no current job
       await fetchCurrentJob();
 
-      alert('Job has been cancelled successfully');
+      toast.success('Job has been cancelled successfully');
     } catch (error) {
       console.error('Failed to cancel job:', error);
-      alert(error.response?.data?.message || 'Failed to cancel job');
+      // alert(error.response?.data?.message || 'Failed to cancel job');
     } finally {
       setUpdating(false);
     }

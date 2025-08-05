@@ -15,6 +15,7 @@ import {
   FunnelIcon,
   CheckCircleIcon,
 } from '@heroicons/react/24/outline';
+import { useToast } from '@/components/common/Toast';
 
 export default function AvailableJobs() {
   const { user } = useAuth();
@@ -33,6 +34,8 @@ export default function AvailableJobs() {
   const [hasMore, setHasMore] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [error, setError] = useState(null);
+
+  const toast = useToast();
 
   const vehicleTypes = [
     'pickup',
@@ -192,7 +195,9 @@ export default function AvailableJobs() {
       setJobs((prev) => prev.filter((job) => job.id !== jobId));
       setTotal((prev) => prev - 1);
 
-      alert('Job accepted successfully! Check your current job status.');
+      toast.success(
+        'Job accepted successfully! Check your current job status.'
+      );
     } catch (error) {
       console.error('Failed to accept job:', error);
       alert(

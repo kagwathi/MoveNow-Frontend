@@ -156,7 +156,7 @@ export default function DriverDashboard() {
       }));
     } catch (error) {
       console.error('Failed to update availability:', error);
-      alert('Failed to update availability status. Please try again.');
+      // alert('Failed to update availability status. Please try again.');
     }
   };
 
