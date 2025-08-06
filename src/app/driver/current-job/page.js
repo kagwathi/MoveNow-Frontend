@@ -444,7 +444,7 @@ export default function CurrentJob() {
 
       {/* Cancel Modal */}
       {showCancelModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg max-w-md w-full p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900">
@@ -466,7 +466,7 @@ export default function CurrentJob() {
               value={cancellationReason}
               onChange={(e) => setCancellationReason(e.target.value)}
               placeholder="Enter cancellation reason..."
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+              className="w-full border text-gray-700 placeholder:text-gray-300 border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-red-500 focus:border-red-500"
               rows="3"
             />
 

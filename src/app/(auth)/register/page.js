@@ -210,9 +210,7 @@ export default function RegisterPage() {
   console.log(formData.confirm_password);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 flex">
-      {/* Left Side - Registration Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-12">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 flex items-center justify-center p-12">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
             <Link href="/" className="inline-block mb-6">
@@ -379,82 +377,6 @@ export default function RegisterPage() {
             </p>
           </div>
         </div>
-      </div>
-
-      {/* Right Side - Benefits */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-purple-600 via-pink-600 to-red-600 relative overflow-hidden">
-        <div className="absolute inset-0 bg-black/20"></div>
-        <div className="relative z-10 flex flex-col justify-center items-center text-white p-12">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold mb-4">
-              {formData.role === 'customer'
-                ? 'Move with Confidence'
-                : 'Drive and Earn'}
-            </h1>
-            <p className="text-xl text-purple-100 max-w-md">
-              {formData.role === 'customer'
-                ? 'Join thousands of satisfied customers who trust MoveNow for their transport needs'
-                : 'Turn your vehicle into a source of income with flexible working hours'}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 gap-6 max-w-sm">
-            {formData.role === 'customer' ? (
-              <>
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                  <div className="text-2xl mb-2">⚡</div>
-                  <div className="font-semibold">Instant Booking</div>
-                  <div className="text-sm text-purple-100">
-                    Book in under 2 minutes
-                  </div>
-                </div>
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                  <div className="text-2xl mb-2">🛡️</div>
-                  <div className="font-semibold">Fully Insured</div>
-                  <div className="text-sm text-purple-100">
-                    Your items are protected
-                  </div>
-                </div>
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                  <div className="text-2xl mb-2">📍</div>
-                  <div className="font-semibold">Real-time Tracking</div>
-                  <div className="text-sm text-purple-100">
-                    Monitor your move live
-                  </div>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                  <div className="text-2xl mb-2">💰</div>
-                  <div className="font-semibold">Earn Well</div>
-                  <div className="text-sm text-purple-100">
-                    Up to KSh 3,000 per day
-                  </div>
-                </div>
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                  <div className="text-2xl mb-2">⏰</div>
-                  <div className="font-semibold">Flexible Hours</div>
-                  <div className="text-sm text-purple-100">
-                    Work when you want
-                  </div>
-                </div>
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                  <div className="text-2xl mb-2">📱</div>
-                  <div className="font-semibold">Easy to Use</div>
-                  <div className="text-sm text-purple-100">
-                    Simple app interface
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-
-        {/* Animated elements */}
-        <div className="absolute top-1/4 right-20 w-20 h-20 bg-white/10 rounded-full floating-element"></div>
-        <div className="absolute bottom-1/3 left-16 w-16 h-16 bg-white/10 rounded-full floating-element-delayed"></div>
-      </div>
     </div>
   );
 }
